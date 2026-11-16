@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Kontak{% endblock %}
+
+{% block content %}
+<div class="kontak-halaman">
+
+  <h1 class="kontak-judul">Kontak</h1>
+
+  <section class="kontak-sekretariat">
+    <h2 class="kontak-subjudul">Sekretariat</h2>
+    <p class="kontak-alamat">{{ profil.alamat_sekretariat|default:"Belum tersedia" }}</p>
+    <p class="kontak-telepon">Telepon: {{ profil.telepon|default:"Belum tersedia" }}</p>
+    <p class="kontak-email">Email: {{ profil.email|default:"Belum tersedia" }}</p>
+  </section>
+
+  <section class="kontak-formulir">
+    <h2 class="kontak-subjudul">Kirim Pesan</h2>
+    <form method="post" novalidate class="kontak-form">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      {% for field in form %}
+        <div class="kontak-field">
+          {{ field.label_tag }}
+          {{ field }}
+          {% for error in field.errors %}
+            <small class="kontak-error">{{ error }}</small>
+          {% endfor %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="kontak-tombol">Kirim</button>
+    </form>
+  </section>
+
+</div>
+{% endblock %}

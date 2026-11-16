@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Profil{% if profil %} - {{ profil.nama_singkat }}{% endif %}{% endblock %}
+
+{% block content %}
+{% if profil %}
+
+  <header class="mb-4">
+    <h1 class="profil-judul-halaman">{{ profil.nama }}</h1>
+    {% if profil.tagline %}
+      <p class="profil-tagline">{{ profil.tagline }}</p>
+    {% endif %}
+  </header>
+
+  {% if profil.gambar_hero %}
+    <img src="{{ profil.gambar_hero.url }}" alt="{{ profil.nama }}" class="img-fluid rounded mb-4">
+  {% endif %}
+
+  {% if profil.tentang %}
+    <section class="mb-4">
+      <h2 class="profil-judul-seksi">Tentang</h2>
+      <p class="profil-rata-penuh">{{ profil.tentang|linebreaksbr }}</p>
+    </section>
+  {% endif %}
+
+  <section class="profil-visimisi mb-5">
+    <h2 class="profil-judul-seksi">Visi &amp; Misi</h2>
+
+    <div class="profil-visi-kartu">
+      <h3 class="profil-judul-sub">Visi</h3>
+      {% if profil.visi %}
+        <blockquote class="profil-visi-teks">&ldquo;{{ profil.visi|linebreaksbr }}&rdquo;</blockquote>
+      {% else %}
+        <p class="profil-visi-kosong">Visi belum tersedia.</p>
+      {% endif %}
+    </div>
+
+    <div class="profil-misi-kartu">
+      <div class="profil-misi-header">
+        <h3 class="profil-judul-sub">Misi</h3>
+        {% if profil.daftar_misi %}
+          <p class="profil-misi-sub">{{ profil.daftar_misi|length }} butir misi</p>
+        {% endif %}
+      </div>
+      {% if profil.daftar_misi %}
+        <ol class="profil-misi-daftar">
+          {% for misi in profil.daftar_misi %}
+            <li class="profil-misi-item">
+              <span class="profil-misi-nomor">{{ forloop.counter|stringformat:"02d" }}</span>
+              <p class="profil-misi-teks">{{ misi }}</p>
+            </li>
+          {% endfor %}
+        </ol>
+      {% else %}
+        <p class="profil-kosong">Misi belum tersedia.</p>
+      {% endif %}
+    </div>
+  </section>
+
+  {% if profil.daftar_sejarah %}
+    <section class="mb-5">
+      <h2 class="profil-judul-seksi">Sejarah</h2>
+      <div class="profil-timeline">
+        {% for periode in profil.daftar_sejarah %}
+          <div class="profil-timeline-item">
+            <h3 class="profil-judul-sub">{{ periode.judul }}</h3>
+            {% for el in periode.isi %}
+              {% if el.jenis == "daftar" %}
+                <ul class="mb-2 {% if el.butir|length > 8 %}profil-kolom-2{% endif %}">
+                  {% for b in el.butir %}<li>{{ b }}</li>{% endfor %}
+                </ul>
+              {% elif el.jenis == "label" %}
+                <p class="profil-label">{{ el.teks }}</p>
+              {% else %}
+                <p class="mb-2">{{ el.teks }}</p>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+{% else %}
+  <div class="alert alert-info">Profil organisasi belum diisi. Silakan isi lewat halaman admin.</div>
+{% endif %}
+{% endblock %}

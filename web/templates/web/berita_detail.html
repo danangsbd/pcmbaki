@@ -1,0 +1,41 @@
+{% extends "base.html" %} {% block title %}{{ berita.judul }} · {{ profil.nama_singkat|default:"PCM" }}{% endblock %} {% block content %}
+<nav aria-label="breadcrumb" class="berita-detail-breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'web:beranda' %}">Beranda</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'web:berita' %}">Berita</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ berita.judul|truncatechars:40 }}</li>
+  </ol>
+</nav>
+
+<div class="row">
+  <div class="col-lg-8">
+    <article class="berita-detail-artikel">
+      <h1 class="h2 berita-detail-judul">{{ berita.judul }}</h1>
+      <time class="berita-detail-tanggal" datetime="{{ berita.tanggal_terbit|date:'c' }}">{{ berita.tanggal_terbit|date:"l, j F Y" }}</time>
+
+      {% if berita.gambar_sampul %}
+      <img src="{{ berita.gambar_sampul.url }}" class="berita-detail-gambar" alt="{{ berita.judul }}" />
+      {% endif %}
+
+      <p class="berita-detail-ringkasan">{{ berita.ringkasan }}</p>
+      <div class="berita-detail-isi">{{ berita.isi|linebreaks }}</div>
+    </article>
+
+    <a href="{% url 'web:berita' %}" class="berita-detail-kembali">&larr; Semua berita</a>
+  </div>
+
+  <aside class="col-lg-4 mt-4 mt-lg-0">
+    {% if berita_lain %}
+    <div class="berita-detail-samping">
+      <h2 class="h5 berita-detail-samping-judul">Berita lainnya</h2>
+      {% for item in berita_lain %}
+      <a href="{% url 'web:berita_detail' item.slug %}" class="berita-detail-lain">
+        <small class="berita-detail-lain-tanggal">{{ item.tanggal_terbit|date:"j F Y" }}</small>
+        {{ item.judul }}
+      </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </aside>
+</div>
+{% endblock %}

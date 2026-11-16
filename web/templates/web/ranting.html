@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Ranting{% endblock %}
+
+{% block content %}
+<div class="ranting-halaman">
+  <h1 class="ranting-judul">Daftar Ranting</h1>
+
+  <div class="ranting-grid">
+    {% for ranting in ranting_list %}
+      <article class="ranting-kartu">
+        <div class="ranting-ikon">
+          <svg class="ranting-ikon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 21h18"/>
+            <path d="M5 21V8l7-5 7 5v13"/>
+            <path d="M9 21v-6h6v6"/>
+          </svg>
+        </div>
+
+        <div class="ranting-baris-atas">
+          <span class="ranting-badge">Ranting</span>
+          <span class="ranting-nomor">No. {{ forloop.counter }}</span>
+        </div>
+
+        <h2 class="ranting-nama">{{ ranting.nama }}</h2>
+        <p class="ranting-alamat">{{ ranting.alamat }}</p>
+
+        <div class="ranting-info">
+          {% if ranting.ketua %}
+            <div class="ranting-info-baris">
+              <span class="ranting-info-label">Ketua</span>
+              <span class="ranting-info-isi">{{ ranting.ketua }}</span>
+            </div>
+          {% endif %}
+          {% if ranting.telepon %}
+            <div class="ranting-info-baris">
+              <span class="ranting-info-label">Telepon</span>
+              <a class="ranting-info-isi" href="tel:{{ ranting.telepon|cut:' '|cut:'-' }}">{{ ranting.telepon }}</a>
+            </div>
+          {% endif %}
+        </div>
+      </article>
+    {% empty %}
+      <p class="ranting-kosong">Belum ada data ranting.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
